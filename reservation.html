@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reserve Your Table | Coffee Dose - Kandy</title>
+    <meta name="description" content="Book your table at Coffee Dose for a perfect coffee experience. Easy online reservation!">
+    <!-- Open Graph / Facebook / Instagram -->
+    <meta property="og:title" content="Reserve a Table | Coffee Dose">
+    <meta property="og:description" content="Book your table at Coffee Dose for a perfect coffee experience. Easy online reservation!">
+    <meta property="og:image" content="images/coffee-hero-section.png">
+    <meta property="og:url" content="https://yourdomain.com/reservation.html">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="step-reservation.css">
+    <link rel="icon" type="image/png" sizes="128x128" href="images/Logo-modified.png">
+    <style>
+        .reservation-bg {
+            
+            min-height: 100vh;
+            position: relative;
+        }
+        .reservation-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 0;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+        .reservation-header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .reservation-logo-wrapper {
+            flex-shrink: 0;
+            position: relative;
+        }
+        .reservation-logo-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            border-radius: 50%;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        @keyframes logoGlow {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+        .reservation-logo-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 15px 35px rgba(59,20,28,0.25);
+            border: 4px solid var(--white-color);
+            transition: transform 0.3s ease;
+        }
+        .reservation-logo-img:hover {
+            transform: rotate(360deg) scale(1.1);
+        }
+        .reservation-header-text {
+            text-align: center;
+            max-width: 500px;
+            position: relative;
+            z-index: 1;
+        }
+        .reservation-header-text h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShimmer 4s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255,107,107,0.3);
+        }
+        @keyframes textShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .step-indicator-modern {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .step-modern {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            opacity: 0.6;
+            transition: all 0.4s ease;
+            transform: scale(0.9);
+        }
+        .step-modern.active {
+            opacity: 1;
+            transform: scale(1.2);
+            animation: stepPulse 2s ease-in-out infinite;
+        }
+        @keyframes stepPulse {
+            0%, 100% { transform: scale(1.2); }
+            50% { transform: scale(1.3); }
+        }
+        .step-modern.completed {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .step-circle-modern {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #ddd, #bbb);
+            color: var(--white-color);
+            border: 3px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .step-modern.active .step-circle-modern {
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
+            color: var(--white-color);
+            border-color: var(--white-color);
+            box-shadow: 0 15px 40px rgba(255,107,107,0.4);
+            animation: circleRotate 3s linear infinite;
+        }
+        @keyframes circleRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .step-modern.completed .step-circle-modern {
+            background: linear-gradient(135deg, #00d2d3, #54a0ff);
+            color: var(--white-color);
+            border-color: var(--white-color);
+            box-shadow: 0 15px 40px rgba(0,210,211,0.4);
+        }
+        .step-modern.completed .step-circle-modern::before {
+            content: '✓';
+            font-size: 1.8rem;
+            animation: checkBounce 0.6s ease-out;
+        }
+        @keyframes checkBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .step-text-modern {
+            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .step-connector {
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #ddd, #bbb);
+            position: relative;
+            z-index: 1;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .step-connector.active {
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+            animation: connectorFlow 2s ease-in-out infinite;
+        }
+        @keyframes connectorFlow {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
+        }
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #54a0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .step-reservation-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .party-size-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .party-size-btn {
+            padding: 18px;
+            border: 3px solid transparent;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: var(--primary-color);
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .party-size-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+        .party-size-btn:hover::before {
+            left: 100%;
+        }
+        .party-size-btn:hover, .party-size-btn.selected {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: var(--white-color);
+            border-color: var(--white-color);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255,107,107,0.4);
+        }
+        .party-size-select {
+            width: 100%;
+            padding: 18px 20px;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: var(--primary-color);
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .party-size-select:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 25px rgba(255,107,107,0.3);
+            outline: none;
+        }
+        .meal-type-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .meal-type-btn {
+            padding: 25px 20px;
+            border: 3px solid transparent;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .meal-type-btn::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        .meal-type-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+        .meal-type-btn:hover::after {
+            left: 100%;
+        }
+        .meal-type-btn:hover, .meal-type-btn.selected {
+            background: linear-gradient(135deg, #48dbfb, #ff9ff3);
+            color: var(--white-color);
+            border-color: var(--white-color);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(72,219,251,0.4);
+        }
+        .meal-type-btn.selected::before {
+            background: var(--white-color);
+            border-color: var(--white-color);
+            animation: checkPulse 1s ease-in-out infinite;
+        }
+        @keyframes checkPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .time-slot-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .time-slot-btn {
+            padding: 15px 10px;
+            border: 3px solid transparent;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: var(--primary-color);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .time-slot-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.4s ease;
+        }
+        .time-slot-btn:hover::before {
+            left: 100%;
+        }
+        .time-slot-btn:hover, .time-slot-btn.selected {
+            background: linear-gradient(135deg, #54a0ff, #5f27cd);
+            color: var(--white-color);
+            border-color: var(--white-color);
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(84,160,255,0.4);
+        }
+        .form-input {
+            width: 100%;
+            height: 55px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border: 3px solid #e9ecef;
+            padding: 0 25px;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .form-input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 30px rgba(255,107,107,0.3);
+            outline: none;
+            transform: translateY(-2px);
+        }
+        textarea.form-input {
+            height: 110px;
+            padding: 20px 25px;
+            resize: vertical;
+        }
+        .button {
+            padding: 18px 35px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            min-width: 140px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .button:hover::before {
+            left: 100%;
+        }
+        .button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+        .reservation-summary {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #ddd;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .reservation-summary div {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .reservation-success-step {
+            background: linear-gradient(135deg, #00d2d3, #54a0ff, #5f27cd);
+            background-size: 300% 300%;
+            animation: successGradient 3s ease infinite;
+            color: var(--white-color);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-top: 25px;
+            box-shadow: 0 15px 40px rgba(0,210,211,0.4);
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        @keyframes successGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @media (max-width: 768px) {
+            .reservation-header-text h1 {
+                font-size: 2.2rem;
+            }
+            .step-connector {
+                width: 50px;
+            }
+            .step-circle-modern {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+            .step-reservation-container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+
+</head>
+<body class="reservation-bg">
+    <!-- Header / Navbar-->
+    <header>
+        <nav class="navbar section-content">
+            <a href="index.html" class="nav-log">
+                <h2 class="logo-text">☕ COFFEE DOSE - KANDY</h2>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <button id="menu-close-button" class="fas fa-times" type="button" title="Close menu"></button>
+                </li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="index.html#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="index.html#menu" class="nav-link">Menu</a></li>
+                <li class="nav-item"><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+                <li class="nav-item"><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button id="menu-open-button" class="fas fa-bars" title="Open menu" ></button>
+        </nav>
+    </header>
+    <main>
+        <section class="reservation-section">
+            <div class="section-content" style="max-width: 700px; margin: 0 auto; padding: 40px 20px;">
+                <div class="reservation-header-flex">
+                    <div class="reservation-logo-wrapper">
+                        <img src="images/Logo.jpg" alt="Coffee Dose Logo" class="reservation-logo-img">
+                    </div>
+                    <div class="reservation-header-text">
+                        <h1>Reserve Your Table</h1>
+                        <p style="color: var(--primary-color); font-size: 1.1rem;">
+                            Experience Kandy's most authentic coffee and fusion treats. Our online reservation system guarantees your table in under 60 seconds – Book now to enjoy our signature brews, desserts, and more — only at Coffee Dose.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step Indicator -->
+                <div class="step-indicator-modern">
+                    <div class="step-modern active" data-step="1">
+                        <div class="step-circle-modern">1</div>
+                        <div class="step-text-modern">Party Size</div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-modern" data-step="2">
+                        <div class="step-circle-modern">2</div>
+                        <div class="step-text-modern">Date</div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-modern" data-step="3">
+                        <div class="step-circle-modern">3</div>
+                        <div class="step-text-modern">Time</div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-modern" data-step="4">
+                        <div class="step-circle-modern">4</div>
+                        <div class="step-text-modern">Details</div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-modern" data-step="5">
+                        <div class="step-circle-modern">5</div>
+                        <div class="step-text-modern">Confirm</div>
+                    </div>
+                </div>
+
+                <div class="step-reservation-container">
+                    <form id="roseoud-style-reservation-form">
+                        <!-- Step 1: Party Size -->
+                        <div class="step-form active" data-step="1">
+                            <div class="step-title">🍽️ How many people?</div>
+                            <div class="party-size-group">
+                                <button type="button" class="party-size-btn" data-size="1">1</button>
+                                <button type="button" class="party-size-btn" data-size="2">2</button>
+                                <button type="button" class="party-size-btn" data-size="3">3</button>
+                                <button type="button" class="party-size-btn" data-size="4">4</button>
+                                <button type="button" class="party-size-btn" data-size="5">5</button>
+                                <button type="button" class="party-size-btn" data-size="6">6</button>
+                            </div>
+                            <select class="party-size-select" name="party-size-select">
+                                <option value="">For larger parties (7+)</option>
+                                <option value="7">7 people</option>
+                                <option value="8">8 people</option>
+                                <option value="9">9 people</option>
+                                <option value="10">10 people</option>
+                                <option value="11">11 people</option>
+                                <option value="12">12 people</option>
+                                <option value="15">15+ people</option>
+                            </select>
+                            <div class="button-group" style="margin-top: 30px;">
+                                <button type="button" class="button next-btn" style="background: var(--secondary-color); color: var(--white-color); width: 100%;">Next Step</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Date Picker -->
+                        <div class="step-form" data-step="2">
+                            <div class="step-title">📅 Select your date</div>
+                            <input type="date" class="form-input" name="date" required style="text-align: center; font-size: 1.2rem;">
+                            <div class="button-group" style="margin-top: 30px; display: flex; gap: 15px;">
+                                <button type="button" class="button prev-btn" style="background: var(--medium-gray-color); color: var(--primary-color); flex: 1;">Back</button>
+                                <button type="button" class="button next-btn" style="background: var(--secondary-color); color: var(--white-color); flex: 2;">Next Step</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Meal Type & Time Slot -->
+                        <div class="step-form" data-step="3">
+                            <div class="step-title">🕐 What time works for you?</div>
+                            <div class="meal-type-group">
+                                <button type="button" class="meal-type-btn" data-meal="breakfast">
+                                    ☀️ Breakfast<br><small>8:00 AM - 11:00 AM</small>
+                                </button>
+                                <button type="button" class="meal-type-btn" data-meal="lunch">
+                                    🌤️ Lunch<br><small>12:00 PM - 3:00 PM</small>
+                                </button>
+                                <button type="button" class="meal-type-btn" data-meal="dinner">
+                                    🌙 Dinner<br><small>6:00 PM - 10:00 PM</small>
+                                </button>
+                            </div>
+                            <div class="step-title" style="margin-top: 25px; font-size: 1.1rem;">Choose exact time:</div>
+                            <div class="time-slot-group">
+                                <!-- Time slot buttons will be dynamically inserted here -->
+                            </div>
+                            <div class="button-group" style="margin-top: 30px; display: flex; gap: 15px;">
+                                <button type="button" class="button prev-btn" style="background: var(--medium-gray-color); color: var(--primary-color); flex: 1;">Back</button>
+                                <button type="button" class="button next-btn" style="background: var(--secondary-color); color: var(--white-color); flex: 2;">Next Step</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: User Details -->
+                        <div class="step-form" data-step="4">
+                            <div class="step-title">📝 Tell us about yourself</div>
+                            <input type="text" class="form-input" name="name" placeholder="Your Full Name*" required>
+                            <input type="email" class="form-input" name="email" placeholder="Email Address*" required>
+                            <input type="tel" class="form-input" name="phone" placeholder="Phone Number*" required>
+                            <textarea class="form-input" name="note" placeholder="Any special requests? (allergies, celebration, seating preference, etc.)"></textarea>
+                            <div class="button-group" style="margin-top: 30px; display: flex; gap: 15px;">
+                                <button type="button" class="button prev-btn" style="background: var(--medium-gray-color); color: var(--primary-color); flex: 1;">Back</button>
+                                <button type="button" class="button next-btn" style="background: var(--secondary-color); color: var(--white-color); flex: 2;">Review Booking</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Summary & Confirm -->
+                        <div class="step-form" data-step="5">
+                            <div class="step-title">✅ Confirm your reservation</div>
+                            <div class="reservation-summary">
+                                <!-- Summary will be populated by JavaScript -->
+                            </div>
+                            <div class="button-group" style="margin-top: 30px; display: flex; gap: 15px;">
+                                <button type="button" class="button prev-btn" style="background: var(--medium-gray-color); color: var(--primary-color); flex: 1;">Back</button>
+                                <button type="submit" class="button" style="background: linear-gradient(135deg, var(--success-color), #2da568); color: var(--white-color); flex: 2;">🎉 Reserve Now!</button>
+                            </div>
+                            <div class="reservation-success-step" style="display:none;">
+                                🎉 Reservation confirmed! We'll see you soon at Coffee Dose!
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer section -->
+    <section class="footer-section">
+        <div class="section-content">
+            <p class="copyright-text">© 2025 Coffee Dose</p>
+            <div class="social-link-list">
+                <a href="#" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a>
+            </div>
+            <p class="policy-text">
+                <a href="#" class="policy-link">Privacy Policy</a>
+                <span class="separator">•</span>
+                <a href="#" class="policy-link">Refund Policy</a>
+            </p>
+        </div>
+    </section>
+    <script src="script.js"></script>
+    <script>
+        // Modern Step-by-Step Reservation Logic
+        (function() {
+            const form = document.getElementById('roseoud-style-reservation-form');
+            const steps = Array.from(document.querySelectorAll('.step-modern'));
+            const stepForms = Array.from(document.querySelectorAll('.step-form'));
+            const connectors = Array.from(document.querySelectorAll('.step-connector'));
+            let currentStep = 1;
+            let selectedPartySize = null;
+            let selectedMealType = null;
+            let selectedTimeSlot = null;
+
+            // Time slots by meal type
+            const timeSlots = {
+                breakfast: ['8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM'],
+                lunch: ['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM'],
+                dinner: ['6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM', '9:00 PM']
+            };
+
+            function showStep(step) {
+                // Hide all forms and deactivate all steps
+                stepForms.forEach(f => f.classList.remove('active'));
+                steps.forEach(s => s.classList.remove('active', 'completed'));
+                connectors.forEach(c => c.classList.remove('active'));
+
+                // Show current form and activate current step
+                const formToShow = stepForms.find(f => f.getAttribute('data-step') == step);
+                const stepToShow = steps.find(s => s.getAttribute('data-step') == step);
+                if (formToShow) formToShow.classList.add('active');
+                if (stepToShow) stepToShow.classList.add('active');
+
+                // Mark previous steps as completed
+                steps.forEach(s => {
+                    const stepNum = parseInt(s.getAttribute('data-step'));
+                    if (stepNum < step) {
+                        s.classList.add('completed');
+                    }
+                });
+
+                // Activate connectors up to current step
+                connectors.forEach((c, index) => {
+                    if (index < step - 1) {
+                        c.classList.add('active');
+                    }
+                });
+
+                currentStep = step;
+                if (step == 5) fillSummary();
+            }
+
+            function validateStep(step) {
+                switch(step) {
+                    case 1:
+                        return selectedPartySize !== null;
+                    case 2:
+                        const dateInput = form.querySelector('input[name="date"]');
+                        return dateInput && dateInput.value.trim() !== '';
+                    case 3:
+                        return selectedMealType !== null && selectedTimeSlot !== null;
+                    case 4:
+                        const name = form.querySelector('input[name="name"]').value.trim();
+                        const email = form.querySelector('input[name="email"]').value.trim();
+                        const phone = form.querySelector('input[name="phone"]').value.trim();
+                        return name && email && phone;
+                    default:
+                        return true;
+                }
+            }
+
+            function fillSummary() {
+                const summary = document.querySelector('.reservation-summary');
+                if (!summary) return;
+                
+                const name = form.querySelector('input[name="name"]').value;
+                const email = form.querySelector('input[name="email"]').value;
+                const phone = form.querySelector('input[name="phone"]').value;
+                const date = form.querySelector('input[name="date"]').value;
+                const note = form.querySelector('textarea[name="note"]').value;
+                
+                const partyText = selectedPartySize || 'Not selected';
+                const mealText = selectedMealType ? selectedMealType.charAt(0).toUpperCase() + selectedMealType.slice(1) : 'Not selected';
+                const timeText = selectedTimeSlot || 'Not selected';
+                
+                summary.innerHTML = `
+                    <h3 style="color: var(--secondary-color); margin-bottom: 15px;">📋 Reservation Summary</h3>
+                    <div style="display: grid; gap: 8px;">
+                        <div><strong>👤 Name:</strong> ${name}</div>
+                        <div><strong>📧 Email:</strong> ${email}</div>
+                        <div><strong>📱 Phone:</strong> ${phone}</div>
+                        <div><strong>👥 Party Size:</strong> ${partyText} ${partyText == 1 ? 'person' : 'people'}</div>
+                        <div><strong>📅 Date:</strong> ${new Date(date).toLocaleDateString()}</div>
+                        <div><strong>🍽️ Meal Type:</strong> ${mealText}</div>
+                        <div><strong>🕐 Time:</strong> ${timeText}</div>
+                        ${note ? `<div><strong>📝 Special Requests:</strong> ${note}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            // Party size selection
+            document.querySelectorAll('.party-size-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.party-size-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedPartySize = this.getAttribute('data-size');
+                    document.querySelector('.party-size-select').value = '';
+                });
+            });
+
+            document.querySelector('.party-size-select').addEventListener('change', function() {
+                if (this.value) {
+                    document.querySelectorAll('.party-size-btn').forEach(b => b.classList.remove('selected'));
+                    selectedPartySize = this.value;
+                }
+            });
+
+            // Meal type selection
+            document.querySelectorAll('.meal-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.meal-type-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedMealType = this.getAttribute('data-meal');
+                    
+                    // Generate time slots
+                    const timeSlotContainer = document.querySelector('.time-slot-group');
+                    timeSlotContainer.innerHTML = '';
+                    
+                    timeSlots[selectedMealType].forEach(time => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'time-slot-btn';
+                        btn.textContent = time;
+                        btn.setAttribute('data-time', time);
+                        btn.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+                            this.classList.add('selected');
+                            selectedTimeSlot = time;
+                        });
+                        timeSlotContainer.appendChild(btn);
+                    });
+                    
+                    selectedTimeSlot = null; // Reset time selection
+                });
+            });
+
+            // Navigation buttons
+            document.querySelectorAll('.next-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (validateStep(currentStep)) {
+                        showStep(currentStep + 1);
+                    } else {
+                        // Show validation message
+                        let message = '';
+                        switch(currentStep) {
+                            case 1: message = 'Please select party size'; break;
+                            case 2: message = 'Please select a date'; break;
+                            case 3: message = 'Please select meal type and time'; break;
+                            case 4: message = 'Please fill in all required fields'; break;
+                        }
+                        alert(message);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.prev-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showStep(currentStep - 1);
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!validateStep(currentStep)) return;
+                
+                // Collect all reservation data
+                const name = form.querySelector('input[name="name"]').value;
+                const email = form.querySelector('input[name="email"]').value;
+                const phone = form.querySelector('input[name="phone"]').value;
+                const date = form.querySelector('input[name="date"]').value;
+                const note = form.querySelector('textarea[name="note"]').value;
+                
+                const partyText = selectedPartySize || 'Not selected';
+                const mealText = selectedMealType ? selectedMealType.charAt(0).toUpperCase() + selectedMealType.slice(1) : 'Not selected';
+                const timeText = selectedTimeSlot || 'Not selected';
+                
+                // Create WhatsApp message
+                const whatsappMessage = `🎉 *NEW RESERVATION - Coffee Dose*
+
+👤 *Customer Details:*
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+
+📅 *Reservation Details:*
+Party Size: ${partyText} ${partyText == 1 ? 'person' : 'people'}
+Date: ${new Date(date).toLocaleDateString()}
+Meal Type: ${mealText}
+Time: ${timeText}
+${note ? `\n📝 *Special Requests:*\n${note}` : ''}
+
+⏰ *Booking Time:* ${new Date().toLocaleString()}
+
+Please confirm this reservation. Reply with "CONFIRMED" to approve.`;
+
+                // Send to owner via WhatsApp
+                const encodedMessage = encodeURIComponent(whatsappMessage);
+                const whatsappURL = `https://wa.me/94716836787?text=${encodedMessage}`;
+                
+                // Show success message
+                const success = form.querySelector('.reservation-success-step');
+                if (success) {
+                    success.innerHTML = `
+                        🎉 Reservation submitted successfully!<br>
+                        <small style="margin-top: 10px; display: block;">
+                            <a href="${whatsappURL}" target="_blank" 
+                               style="color: var(--white-color); text-decoration: underline;">
+                               📱 Click here to send details to owner
+                            </a>
+                        </small>
+                    `;
+                    success.style.display = 'block';
+                    success.scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                // Automatically open WhatsApp after 2 seconds
+                setTimeout(() => {
+                    window.open(whatsappURL, '_blank');
+                }, 2000);
+                
+                setTimeout(() => {
+                    if (success) success.style.display = 'none';
+                    form.reset();
+                    selectedPartySize = null;
+                    selectedMealType = null;
+                    selectedTimeSlot = null;
+                    showStep(1);
+                }, 8000);
+            });
+
+            // Set minimum date to today
+            const dateInput = document.querySelector('input[name="date"]');
+            if (dateInput) {
+                const today = new Date();
+                const minDate = today.toISOString().split('T')[0];
+                dateInput.setAttribute('min', minDate);
+            }
+
+        })();
+    </script>
+</body>
+</html>
